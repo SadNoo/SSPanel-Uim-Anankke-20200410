@@ -22,7 +22,7 @@
                                 <div class="form-group form-group-label">
                                     <label class="floating-label" for="server">节点地址</label>
                                     <input class="form-control maxwidth-edit" id="server" type="text" name="server">
-                                    <p class="form-control-guide"><i class="material-icons">info</i>如果填写为域名，“节点IP”会自动设置为解析的IP
+                                    <p class="form-control-guide"><i class="material-icons">info</i>普通节点填写域名；SS2022 单端口填写 host;port;server_key_base64
                                     </p>
                                 </div>
 
@@ -112,6 +112,7 @@
                                             <option value="11">V2Ray</option>
                                             <option value="12">V2Ray 中转</option>
                                             <option value="13">Shadowsocks V2Ray-Plugin</option>
+                                            <option value="14">Shadowsocks 2022 单端口多用户</option>
                                         </select>
                                     </div>
                                 </div>

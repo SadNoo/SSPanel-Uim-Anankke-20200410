@@ -10,6 +10,7 @@ use App\Models\Smartline;
 use App\Utils\ConfRender;
 use App\Utils\Tools;
 use App\Utils\URL;
+use App\Services\SS2022;
 
 /**
  *  HomeController
@@ -179,6 +180,17 @@ class LinkController extends BaseController
             }
             $proxy_confs[] = $v2rays;
             $confs[] = $v2rays;
+        }
+        // SS2022 multi-user single-port nodes (sort=14).
+        if ((int)$user->enable === 1
+            && strtotime($user->expire_in) > time()
+            && (float)$user->transfer_enable > (float)$user->u + (float)$user->d
+        ) {
+            foreach (SS2022::nodesForUser($user) as $node) {
+                $ss2022 = SS2022::mihomoProxy($user, $node);
+                $proxy_confs[] = $ss2022;
+                $confs[] = $ss2022;
+            }
         }
         $render = ConfRender::getTemplateRender();
         $render->assign('user', $user)

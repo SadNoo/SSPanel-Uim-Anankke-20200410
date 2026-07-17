@@ -46,6 +46,7 @@ use App\Utils\Pay;
 use App\Utils\URL;
 use App\Utils\DatatablesHelper;
 use App\Services\Mail;
+use App\Services\SS2022;
 
 /**
  *  HomeController
@@ -478,7 +479,9 @@ class UserController extends BaseController
             $array_node['id'] = $node->id;
             $array_node['class'] = $node->node_class;
             $array_node['name'] = $node->name;
-            if ($node->sort == 13) {
+            if ($node->sort == SS2022::NODE_SORT) {
+                $array_node['server'] = SS2022::publicEndpoint($node);
+            } elseif ($node->sort == 13) {
                 $server = Tools::ssv2Array($node->server);
                 $array_node['server'] = $server['add'];
             } else {
@@ -489,7 +492,13 @@ class UserController extends BaseController
             $array_node['mu_only'] = $node->mu_only;
             $array_node['group'] = $node->node_group;
 
-            $array_node['raw_node'] = $node;
+            if ($node->sort == SS2022::NODE_SORT) {
+                $safeNode = clone $node;
+                $safeNode->server = $array_node['server'];
+                $array_node['raw_node'] = $safeNode;
+            } else {
+                $array_node['raw_node'] = $node;
+            }
             $regex = Config::get('flag_regex');
             $matches = array();
             preg_match($regex, $node->name, $matches);
@@ -506,7 +515,7 @@ class UserController extends BaseController
                 if ($log['node_id'] != $node->id) {
                     continue;
                 }
-                if (in_array($sort, array(0, 7, 8, 10, 11, 12, 13))) {
+                if (in_array($sort, array(0, 7, 8, 10, 11, 12, 13, 14))) {
                     $array_node['online_user'] = $log['online_user'];
                 } else {
                     $array_node['online_user'] = -1;
@@ -518,7 +527,7 @@ class UserController extends BaseController
             // 0: new node; -1: offline; 1: online
             $node_heartbeat = $node->node_heartbeat + 300;
             $array_node['online'] = -1;
-            if (!in_array($sort, array(0, 7, 8, 10, 11, 12, 13)) || $node_heartbeat == 300 ) {
+            if (!in_array($sort, array(0, 7, 8, 10, 11, 12, 13, 14)) || $node_heartbeat == 300 ) {
                 $array_node['online'] = 0;
             } elseif ($node_heartbeat > time()) {
                 $array_node['online'] = 1;
@@ -606,7 +615,7 @@ class UserController extends BaseController
                 }
 
 
-                if (in_array($node->sort, array(0, 7, 8, 10, 11, 12, 13))) {
+                if (in_array($node->sort, array(0, 7, 8, 10, 11, 12, 13, 14))) {
                     $node_tempalive = $node->getOnlineUserCount();
                     $node_prealive[$node->id] = $node_tempalive;
                     if ($node->isNodeOnline() !== null) {

@@ -9,6 +9,8 @@ use App\Utils\Tools;
 use App\Controllers\AdminController;
 use App\Utils\CloudflareDriver;
 use App\Services\Config;
+use App\Services\SS2022;
+use InvalidArgumentException;
 use Ozdemir\Datatables\Datatables;
 use App\Utils\DatatablesHelper;
 
@@ -54,12 +56,27 @@ class NodeController extends AdminController
         $node->status = $request->getParam('status');
         $node->sort = $request->getParam('sort');
 
-        $req_node_ip = trim($request->getParam('node_ip'));
-        if ($req_node_ip == '') {
-            $req_node_ip = $node->server;
+        if ((int)$node->sort === SS2022::NODE_SORT) {
+            try {
+                $ss2022Server = SS2022::parseServer($node->server);
+            } catch (InvalidArgumentException $exception) {
+                $rs['ret'] = 0;
+                $rs['msg'] = $exception->getMessage();
+                return $response->getBody()->write(json_encode($rs));
+            }
+            $node->method = SS2022::METHOD;
+            $node->custom_method = 0;
+            $node->custom_rss = 0;
+            $node->mu_only = 1;
         }
 
-        if (in_array($node->sort, array(0, 1, 10, 11, 12, 13))) {
+        $req_node_ip = trim($request->getParam('node_ip'));
+        if ($req_node_ip == '') {
+            $server_list = explode(';', $node->server);
+            $req_node_ip = $server_list[0];
+        }
+
+        if (in_array($node->sort, array(0, 1, 10, 11, 12, 13, 14))) {
             $server_list = explode(';', $node->server);
             if (!Tools::is_ip($server_list[0])) {
                 $node->node_ip = gethostbyname($server_list[0]);
@@ -84,7 +101,8 @@ class NodeController extends AdminController
 
         $node->save();
 
-        $domain_name = explode('.' . Config::get('cloudflare_name'), $node->server);
+        $server_host = isset($ss2022Server) ? $ss2022Server['host'] : explode(';', $node->server)[0];
+        $domain_name = explode('.' . Config::get('cloudflare_name'), $server_host);
         if (Config::get('cloudflare_enable') == 'true') {
             CloudflareDriver::updateRecord($domain_name[0], $node->node_ip);
         }
@@ -121,13 +139,28 @@ class NodeController extends AdminController
         $node->type = $request->getParam('type');
         $node->sort = $request->getParam('sort');
 
+        if ((int)$node->sort === SS2022::NODE_SORT) {
+            try {
+                SS2022::parseServer($node->server);
+            } catch (InvalidArgumentException $exception) {
+                $rs['ret'] = 0;
+                $rs['msg'] = $exception->getMessage();
+                return $response->getBody()->write(json_encode($rs));
+            }
+            $node->method = SS2022::METHOD;
+            $node->custom_method = 0;
+            $node->custom_rss = 0;
+            $node->mu_only = 1;
+        }
+
         $req_node_ip = trim($request->getParam('node_ip'));
         if ($req_node_ip == '') {
-            $req_node_ip = $node->server;
+            $server_list = explode(';', $node->server);
+            $req_node_ip = $server_list[0];
         }
 
         $success = true;
-        if (in_array($node->sort, array(0, 1, 10, 11, 12, 13))) {
+        if (in_array($node->sort, array(0, 1, 10, 11, 12, 13, 14))) {
             $server_list = explode(';', $node->server);
             if (!Tools::is_ip($server_list[0])) {
                 $success = $node->changeNodeIp($server_list[0]);
@@ -265,6 +298,9 @@ class NodeController extends AdminController
                     break;
                 case 13:
                     $sort = 'Shadowsocks - V2Ray-Plugin';
+                    break;
+                case 14:
+                    $sort = 'Shadowsocks 2022 - 单端口多用户';
                     break;
                 default:
                     $sort = '系统保留';

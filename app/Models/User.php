@@ -219,6 +219,9 @@ class User extends Model
     {
         $uid = $this->attributes['id'];
         Link::where('userid', $uid)->delete();
+        ClientApiToken::where('user_id', $uid)
+            ->whereNull('revoked_at')
+            ->update(array('revoked_at' => time()));
     }
 
     public function clear_inviteCodes()
@@ -268,6 +271,7 @@ class User extends Model
         UnblockIp::where('userid', '=', $uid)->delete();
         TrafficLog::where('user_id', '=', $uid)->delete();
         Token::where('user_id', '=', $uid)->delete();
+        ClientApiToken::where('user_id', '=', $uid)->delete();
         PasswordReset::where('email', '=', $email)->delete();
 
         $this->delete();

@@ -19,6 +19,7 @@ use App\Utils\Geetest;
 use App\Utils\URL;
 use App\Models\Node;
 use App\Models\Relay;
+use App\Services\SS2022;
 
 class VueController extends BaseController
 {
@@ -366,6 +367,8 @@ class VueController extends BaseController
             $array_node['name'] = $node->name;
             if ($this->user->class < $node->node_class) {
                 $array_node['server'] = '***.***.***.***';
+            } elseif ($node->sort == SS2022::NODE_SORT) {
+                $array_node['server'] = SS2022::publicEndpoint($node);
             } elseif ($node->sort == 13) {
                 $server = Tools::ssv2Array($node->server);
                 $array_node['server'] = $server['add'];
@@ -378,7 +381,13 @@ class VueController extends BaseController
             $array_node['mu_only'] = $node->mu_only;
             $array_node['group'] = $node->node_group;
 
-            $array_node['raw_node'] = $node;
+            if ($node->sort == SS2022::NODE_SORT) {
+                $safeNode = clone $node;
+                $safeNode->server = $array_node['server'];
+                $array_node['raw_node'] = $safeNode;
+            } else {
+                $array_node['raw_node'] = $node;
+            }
             $regex = Config::get('flag_regex');
             $matches = array();
             preg_match($regex, $node->name, $matches);
@@ -397,7 +406,7 @@ class VueController extends BaseController
                 $array_node['online'] = -1;
             }
 
-            if (in_array($node->sort, array(0, 7, 8, 10, 11, 12, 13))) {
+            if (in_array($node->sort, array(0, 7, 8, 10, 11, 12, 13, 14))) {
                 $array_node['online_user'] = $node->getOnlineUserCount();
             } else {
                 $array_node['online_user'] = -1;

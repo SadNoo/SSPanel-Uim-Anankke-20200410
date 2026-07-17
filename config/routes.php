@@ -294,6 +294,16 @@ $app->group('/admin', function () {
 })->add(new Admin());
 
 // API
+$app->group('/api/client/v1', function () {
+    $this->get('/capabilities', App\Controllers\Client\ClientApiV1Controller::class . ':capabilities');
+    $this->post('/auth/login', App\Controllers\Client\ClientApiV1Controller::class . ':login');
+    $this->post('/auth/refresh', App\Controllers\Client\ClientApiV1Controller::class . ':refresh');
+    $this->post('/auth/logout', App\Controllers\Client\ClientApiV1Controller::class . ':logout');
+    $this->get('/me', App\Controllers\Client\ClientApiV1Controller::class . ':me');
+    $this->get('/subscription', App\Controllers\Client\ClientApiV1Controller::class . ':subscription');
+    $this->get('/subscription/config', App\Controllers\Client\ClientApiV1Controller::class . ':config');
+});
+
 $app->group('/api', function () {
     $this->get('/token/{token}', App\Controllers\ApiController::class . ':token');
     $this->post('/token', App\Controllers\ApiController::class . ':newToken');

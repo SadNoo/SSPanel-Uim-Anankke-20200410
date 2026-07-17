@@ -28,6 +28,7 @@ use ArrayObject;
 use CloudXNS\Api;
 use App\Models\Disconnect;
 use App\Models\UnblockIp;
+use App\Models\ClientApiToken;
 use Exception;
 use RuntimeException;
 
@@ -37,7 +38,7 @@ class Job
     {
         $nodes = Node::all();
         foreach ($nodes as $node) {
-            if (in_array($node->sort, array(0, 1, 10, 11, 12, 13))) {
+            if (in_array($node->sort, array(0, 1, 10, 11, 12, 13, 14))) {
                 $server_list = explode(';', $node->server);
                 if (!Tools::is_ip($server_list[0]) && $node->changeNodeIp($server_list[0])) {
                     $node->save();
@@ -64,7 +65,7 @@ class Job
             system('mysqldump --user=' . Config::get('db_username') . ' --password=' . Config::get('db_password') . ' --host=' . $db_address_array[0] . ' ' . (isset($db_address_array[1]) ? '-P ' . $db_address_array[1] : '') . ' ' . Config::get('db_database') . ' > /tmp/ssmodbackup/mod.sql');
         } else {
             system(
-                'mysqldump --user=' . Config::get('db_username') . ' --password=' . Config::get('db_password') . ' --host=' . $db_address_array[0] . ' ' . (isset($db_address_array[1]) ? '-P ' . $db_address_array[1] : '') . ' ' . Config::get('db_database') . ' announcement auto blockip bought code coupon disconnect_ip link login_ip payback radius_ban shop speedtest ss_invite_code ss_node ss_password_reset ticket unblockip user user_token email_verify detect_list relay paylist> /tmp/ssmodbackup/mod.sql',
+                'mysqldump --user=' . Config::get('db_username') . ' --password=' . Config::get('db_password') . ' --host=' . $db_address_array[0] . ' ' . (isset($db_address_array[1]) ? '-P ' . $db_address_array[1] : '') . ' ' . Config::get('db_database') . ' announcement auto blockip bought client_api_tokens code coupon disconnect_ip link login_ip payback radius_ban shop speedtest ss_invite_code ss_node ss_password_reset ticket unblockip user user_token email_verify detect_list relay paylist> /tmp/ssmodbackup/mod.sql',
                 $ret
             );
             system(
@@ -135,7 +136,7 @@ class Job
         ini_set('memory_limit', '-1');
         $nodes = Node::all();
         foreach ($nodes as $node) {
-            if ($node->sort == 0 || $node->sort == 10 || $node->sort == 11 || $node->sort == 12 || $node->sort == 13) {
+            if ($node->sort == 0 || $node->sort == 10 || $node->sort == 11 || $node->sort == 12 || $node->sort == 13 || $node->sort == 14) {
                 if (date('d') == $node->bandwidthlimit_resetday) {
                     $node->node_bandwidth = 0;
                     $node->save();
@@ -149,6 +150,7 @@ class Job
         DetectLog::where('datetime', '<', time() - 86400 * 3)->delete();
         Speedtest::where('datetime', '<', time() - 86400 * 3)->delete();
         EmailVerify::where('expire_in', '<', time() - 86400 * 3)->delete();
+        ClientApiToken::where('expires_at', '<', time() - 86400 * 30)->delete();
         system('rm ' . BASE_PATH . '/storage/*.png', $ret);
         Telegram::Send('姐姐姐姐，数据库被清理了，感觉身体被掏空了呢~');
 

@@ -165,7 +165,7 @@ CREATE TABLE IF NOT EXISTS `ss_node` (
   `id` int(11) NOT NULL,
   `name` varchar(128) NOT NULL,
   `type` int(3) NOT NULL,
-  `server` varchar(128) NOT NULL,
+  `server` varchar(255) NOT NULL,
   `method` varchar(64) NOT NULL,
   `info` varchar(128) NOT NULL,
   `status` varchar(128) NOT NULL,
@@ -553,7 +553,7 @@ CREATE TABLE IF NOT EXISTS `ss_node` (
   `id` int(11) NOT NULL,
   `name` varchar(128) NOT NULL,
   `type` int(3) NOT NULL,
-  `server` varchar(128) NOT NULL,
+  `server` varchar(255) NOT NULL,
   `method` varchar(64) NOT NULL,
   `info` varchar(128) NOT NULL,
   `status` varchar(128) NOT NULL,
@@ -697,4 +697,21 @@ ALTER TABLE `paylist`
 ALTER TABLE `paylist`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;ALTER TABLE `user_traffic_log` CHANGE `u` `u` BIGINT(20) NOT NULL, CHANGE `d` `d` BIGINT(20) NOT NULL;
 
-ALTER TABLE `user` ADD `discord` BIGINT NULL AFTER `telegram_id`; 
+ALTER TABLE `user` ADD `discord` BIGINT NULL AFTER `telegram_id`;
+
+CREATE TABLE IF NOT EXISTS `client_api_tokens` (
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` INT NOT NULL,
+  `token_hash` CHAR(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `token_type` VARCHAR(16) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `family_id` CHAR(32) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `platform` VARCHAR(16) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+  `device_name` VARCHAR(128) NOT NULL DEFAULT '',
+  `created_at` BIGINT NOT NULL,
+  `expires_at` BIGINT NOT NULL,
+  `revoked_at` BIGINT NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `client_api_tokens_token_hash_unique` (`token_hash`),
+  KEY `client_api_tokens_user_family_index` (`user_id`, `family_id`),
+  KEY `client_api_tokens_expiry_index` (`expires_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

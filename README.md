@@ -18,6 +18,14 @@
 
 SSPanel UIM 是一款专为 Shadowsocks / ShadowsocksR / V2Ray 设计的多用户管理面板，基于 ss-panel-v3-mod 开发。
 
+## 本 fork 新增功能
+
+- 支持 `2022-blake3-aes-256-gcm` 多用户单端口节点（`sort=14`），与本项目配套的 `sshappy` 后端使用同一密钥派生协议
+- 提供 `/api/client/v1` 原生客户端 API，可供 iOS、Android、macOS、Windows 和 Linux 登录面板并更新 mihomo 配置
+- 客户端 token 采用摘要存储、短时 access token、refresh token 轮换和设备级撤销
+
+部署前请阅读 [SS2022 单端口与客户端 API v1](docs/SS2022_CLIENT_API.md) 并执行其中的数据库迁移。
+
 ## 特性
 
 - 集成超过 8 种支付系统
@@ -169,4 +177,3 @@ SSPanel UIM 离不开所有 [贡献代码](https://github.com/Anankke/SSPanel-Ui
 #### laurieryayoi
 
 [laurieryayoi 的前端课程报名](https://t.me/kinokonominoco)
-
