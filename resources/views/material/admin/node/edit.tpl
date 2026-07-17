@@ -24,7 +24,7 @@
                                     <label class="floating-label" for="server">节点地址</label>
                                     <input class="form-control maxwidth-edit" id="server" name="server" type="text"
                                            value="{$node->server}">
-                                    <p class="form-control-guide"><i class="material-icons">info</i>如果填写为域名，“节点IP”会自动设置为解析的IP
+                                    <p class="form-control-guide"><i class="material-icons">info</i>普通节点填写域名；SS2022 单端口填写 host;port;server_key_base64
                                     </p>
                                 </div>
 
@@ -119,6 +119,7 @@
                                             <option value="13" {if $node->sort==13}selected{/if}>Shadowsocks
                                                 V2Ray-Plugin
                                             </option>
+                                            <option value="14" {if $node->sort==14}selected{/if}>Shadowsocks 2022 单端口多用户</option>
                                         </select>
                                     </div>
                                 </div>
@@ -283,4 +284,3 @@
     });
 {/literal}
 </script>
-

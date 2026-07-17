@@ -127,7 +127,7 @@ class Node extends Model
             return false;
         }
 
-        if (!in_array($this->attributes['sort'], [0, 7, 8, 10, 11, 12, 13])) {
+        if (!in_array($this->attributes['sort'], [0, 7, 8, 10, 11, 12, 13, 14])) {
             return null;
         }
 

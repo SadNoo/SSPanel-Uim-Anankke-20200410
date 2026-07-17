@@ -76,6 +76,7 @@ before_script:
       ./test/listTpl.sh;
     fi
 script:
+  - php test/ss2022.php
   - chmod +x test/test.sh
   - sudo chmod -R 755 *
   - cp test/config.php config/.config.php

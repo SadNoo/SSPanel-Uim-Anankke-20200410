@@ -125,7 +125,12 @@
                                         {$relay_rule = $tools->pick_out_relay_rule($node['id'], $user->port, $relay_rules)}
                                     {/if}
 
-                                    {if $node['mu_only'] != 1 && ($node['sort'] != 11 || $node['sort']!=12)}
+                                    {if $node['sort'] == 14}
+                                        <div class="tiptitle">
+                                            <a href="javascript:void(0);">{$node['name']}</a>
+                                            <div class="label label-brand-accent">SS2022 单端口节点，请通过客户端订阅使用</div>
+                                        </div>
+                                    {elseif $node['mu_only'] != 1 && $node['sort'] != 11 && $node['sort'] != 12}
                                         <div class="tiptitle">
                                             <a href="javascript:void(0);"
                                                onClick="urlChange('{$node['id']}',0,{if $relay_rule != null}{$relay_rule->id}{else}0{/if})">
@@ -269,7 +274,12 @@
                                                         <div class="card nodetip-table">
                                                             <div class="card-main">
                                                                 <div class="card-inner">
-                                                                    {if $node['mu_only'] != 1 && ($node['sort'] != 11 || $node['sort']!=12)}
+                                                                    {if $node['sort'] == 14}
+                                                                        <p class="card-heading">
+                                                                            {$node['name']}
+                                                                            <span class="label label-brand-accent">SS2022 单端口节点，请通过客户端订阅使用</span>
+                                                                        </p>
+                                                                    {elseif $node['mu_only'] != 1 && $node['sort'] != 11 && $node['sort'] != 12}
                                                                         <p class="card-heading">
                                                                             <a href="javascript:void(0);"
                                                                                onClick="urlChange('{$node['id']}',0,{if $relay_rule != null}{$relay_rule->id}{else}0{/if})">{$node['name']}
@@ -442,4 +452,3 @@
     {/literal}
 
 </script>
-
