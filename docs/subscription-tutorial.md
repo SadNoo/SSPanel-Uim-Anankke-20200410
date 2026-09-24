@@ -21,7 +21,7 @@
 | Windows | v2rayN、Clash Verge Rev | v2rayN / v2rayNG / Clash |
 | Linux 桌面 | Clash Verge Rev、sing-box | Clash / sing-box |
 
-**订阅类型必须和客户端对应**，例如 Clash 订阅不能导入 v2rayN。
+**订阅类型必须和客户端对应**，例如 Clash 订阅不能导入 v2rayN。各客户端的下载地址见 [二、客户端下载地址](#二客户端下载地址)。
 
 各订阅包含的协议：
 
@@ -39,7 +39,47 @@
 
 ---
 
-## 二、客户端订阅
+## 二、客户端下载地址
+
+> **请只从下面的官方地址下载。** 搜索引擎里有很多仿冒的“官网”，下载的安装包可能被篡改。
+
+### iPhone / iPad / Mac（App Store）
+
+| 客户端 | 下载地址 | 说明 |
+| --- | --- | --- |
+| sing-box | [App Store（sing-box VT）](https://apps.apple.com/app/sing-box-vt/id6673731168) | 免费；支持 iPhone、iPad、Mac、Apple TV |
+| Shadowrocket | [App Store](https://apps.apple.com/app/shadowrocket/id932747118) | 付费；支持 iPhone、iPad、Apple 芯片 Mac |
+| Quantumult X | [App Store](https://apps.apple.com/app/quantumult-x/id1443988620) | 付费 |
+| Loon | [App Store](https://apps.apple.com/app/loon/id1373567447) | 付费 |
+| Surge 5 | [App Store（iOS）](https://apps.apple.com/app/surge-5/id1442620678)、[官网（Mac 版）](https://nssurge.com/) | 功能需内购解锁，价格较高 |
+
+> **中国大陆区 Apple ID 搜不到这些 App**，需要登录**非中国大陆区**（如美国、香港等）的 Apple ID 才能下载。
+> 只在 App Store 里切换账号即可，**不要**在「设置 → iCloud」里登录别人的 Apple ID，以免设备被锁。
+
+### Android
+
+| 客户端 | 下载地址 |
+| --- | --- |
+| sing-box（SFA） | [Google Play](https://play.google.com/store/apps/details?id=io.nekohasekai.sfa)、[GitHub](https://github.com/SagerNet/sing-box/releases) |
+| v2rayNG | [GitHub](https://github.com/2dust/v2rayNG/releases)（已从 Google Play 下架，只能从 GitHub 下载） |
+| FlClash | [GitHub](https://github.com/chen08209/FlClash/releases) |
+| Clash Meta for Android | [GitHub](https://github.com/MetaCubeX/ClashMetaForAndroid/releases) |
+
+> GitHub 下载 APK 时，大多数手机选择文件名带 **`arm64-v8a`** 的版本；不确定就选带 **`universal`** 的版本。
+
+### Windows / macOS / Linux
+
+| 客户端 | 平台 | 下载地址 |
+| --- | --- | --- |
+| v2rayN | Windows（新版也支持 macOS / Linux） | [GitHub](https://github.com/2dust/v2rayN/releases) |
+| Clash Verge Rev | Windows / macOS / Linux | [GitHub](https://github.com/clash-verge-rev/clash-verge-rev/releases) |
+| sing-box | macOS / Linux / Windows | macOS 用 [App Store 版](https://apps.apple.com/app/sing-box-vt/id6673731168)；其他平台见 [GitHub](https://github.com/SagerNet/sing-box/releases) |
+
+> 在 GitHub 的 Releases 页面，展开最新版本下方的 **Assets** 就能看到安装包。Windows 一般下载带 `windows-64` / `x64` 的文件，Apple 芯片 Mac 下载带 `arm64` / `aarch64` 的，Intel Mac 下载带 `x64` / `amd64` 的。
+
+---
+
+## 三、客户端订阅
 
 ![客户端订阅：sing-box、v2rayN / v2rayNG、Clash](images/subscription-1.png)
 
@@ -50,7 +90,8 @@
 1. **配置版本**：在下拉框里选择与你客户端版本相符的配置。
    - 默认的「1.14 兼容版」适用于大多数用户。
    - 如果导入报错，先把客户端升级到最新版再试。
-2. **模式**：
+   - 在 sing-box 的 **设置（Settings）→ 关于** 中可以看到客户端版本号。App Store 版有时更新较慢，如果你的客户端版本低于 1.14，而下拉框里有更低版本的配置，请选择与客户端版本相符的那一项。
+2. **模式**（QUIC / Tailscale 模式只有 sing-box 提供，其他客户端没有这个选项）：
    | 模式 | 说明 |
    | --- | --- |
    | 普通 | 默认配置，**不确定就选这个** |
@@ -163,7 +204,7 @@ Shadowrocket 只提供 **「一键导入」**：
 
 ---
 
-## 三、按协议订阅（进阶）
+## 四、按协议订阅（进阶）
 
 ![按协议订阅：SS / SS2022、SSR、VMess、VLESS REALITY](images/subscription-3.png)
 
@@ -183,12 +224,12 @@ Shadowrocket 只提供 **「一键导入」**：
 | VLESS REALITY | 独立订阅 | 只含 VLESS REALITY 节点，客户端需要支持 REALITY（如较新版本的 v2rayN / v2rayNG / sing-box） |
 
 - **复制订阅 / SS2022 订阅 / 独立订阅**：复制订阅链接，在客户端中按「添加订阅」的方式导入，方法同上。
-- **全部 URL**：获取该协议所有节点的分享链接（`ss://`、`ssr://`、`vmess://` 这类）。复制后在客户端中选择 **从剪贴板导入**。
+- **全部 URL**：复制该协议所有节点的 URI（`ss://`、`ssr://`、`vmess://` 这类链接）。复制后在客户端中选择 **从剪贴板导入**。
   - 这种方式导入的是**固定节点**，节点变动后**不会自动更新**，需要重新获取。能用订阅就优先用订阅。
 
 ---
 
-## 四、常见问题
+## 五、常见问题
 
 **Q：一键导入没反应？**
 A：说明设备上没有安装对应客户端，或浏览器拦截了唤起。先安装客户端；iOS 请用 Safari 打开面板；也可以改用「复制订阅」手动添加。
